@@ -3,9 +3,10 @@ from django.urls import reverse
 from rest_framework import status
 
 from .models import Product
+from .serializers import ProductSerializer
 
 
-class ProductModelTest(TestCase):
+class ProductTest(TestCase):
     def setUp(self):
         self.url = reverse('product-list')
         self.product1 = Product.objects.create(
@@ -72,8 +73,8 @@ class ProductModelTest(TestCase):
             unit_price=15.0,
             commission_rate=0.08
         )
-        self.assertEqual(product.code, 'P002')
-        self.assertEqual(product.description, 'Product 02')
+        self.assertEqual(product.code, 'P003')
+        self.assertEqual(product.description, 'Product 03')
         self.assertEqual(product.unit_price, 15.0)
         self.assertEqual(product.commission_rate, 0.08)
 
@@ -87,3 +88,27 @@ class ProductModelTest(TestCase):
         response = self.client.get(filter_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['code'], 'P001')
+
+    def test_update_product(self):
+        updated_data = {
+            "code": "P001",
+            "description": "Updated Product",
+        }
+        
+        response = self.client.put(f'/api/products/update/{self.product1.code}/', updated_data, format='json', content_type='application/json')
+        product = Product.objects.get(code=self.product1.code)
+        serializer = ProductSerializer(product)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(product.description, "Updated Product")
+
+    def test_update_nonexistent_product(self):
+        data = {
+            "code": "NonExistentCode",
+            "description": "Updated Product",
+        }
+
+        response = self.client.put('/api/products/update/NonExistentCode/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data, {"message": "Product not found"})
