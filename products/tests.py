@@ -89,6 +89,12 @@ class ProductTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['code'], 'P001')
 
+    def test_get_nonexistent_product(self):
+        filter_url = f'{self.url}X009/'
+        response = self.client.get(filter_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['message'], 'Product not found')
+
     def test_update_product(self):
         updated_data = {
             "code": "P001",
@@ -112,3 +118,15 @@ class ProductTest(TestCase):
         response = self.client.put('/api/products/update/NonExistentCode/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data, {"message": "Product not found"})
+
+    def test_delete_product(self):
+        filter_url = f'{self.url}delete/P001/'
+        response = self.client.delete(filter_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.data['message'], 'Product deleted')
+
+    def test_delete_nonexistent_product(self):
+        filter_url = f'{self.url}delete/X009/'
+        response = self.client.delete(filter_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['message'], 'Product not found')
