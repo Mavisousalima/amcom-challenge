@@ -113,3 +113,20 @@ node_modules/
 *.orig
 *.class
 .idea
+
+# Ignore migration files
+__pycache__
+*.pyc
+*.pyo
+__pycache__
+*.pyc
+*.pyo
+db.sqlite3
+*.log
+*.bak
+
+# Ignore migration directories
+*/migrations/
+__pycache__
+*.pyc
+*.pyo
