@@ -12,6 +12,7 @@ class SaleListView(APIView):
         serializer = SaleSerializer(sales, many=True)
         return Response(serializer.data)
     
+    
 class SaleDetailView(APIView):
     def get(self, request, pk):
         try:

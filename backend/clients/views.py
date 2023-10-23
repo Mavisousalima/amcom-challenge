@@ -23,6 +23,16 @@ class ClientDetailView(APIView):
           return Response(serializer.data)
 
 
+class ClientCreateView(APIView):
+     def post(self, request):
+          serializer = ClientSerializer(data=request.data)
+
+          if serializer.is_valid():
+               serializer.save()
+               return Response(serializer.data, status=status.HTTP_201_CREATED)
+          return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class ClientUpdateView(APIView):
      def put(self, request, pk):
           try:
