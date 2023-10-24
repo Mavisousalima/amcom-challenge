@@ -19,8 +19,8 @@ const Navbar = () => {
           <div className={`bar ${isMenuOpen ? 'open' : ''}`}></div>
         </div>
         <div className={`menu ${isMenuOpen ? 'open' : ''}`}>
-          <a href="/page1" style={{color: "#00585E"}}>Page 1</a>
-          <a href="/page2" style={{color: "#00585E"}}>Page 2</a>
+          <a href="/page1" style={{color: "#00585E"}}>Vendas</a>
+          <a href="/page2" style={{color: "#00585E"}}>Comissões</a>
         </div>
         <Link to="/"><img src={logo} alt='Logo'/></Link>
       </div>

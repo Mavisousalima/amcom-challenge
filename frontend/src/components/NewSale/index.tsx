@@ -37,6 +37,7 @@ function NewSale() {
     const [selectedSellerId, setSelectedSellerId] = useState<SellerData>();
     const [clients, setClients] = useState<ClientData[]>([]);
     const [currentDate, setCurrentDate] = useState<string>(getCurrentDate());
+    const [totalSale, setTotalSale] = useState<number>(0);
     
     useEffect(() => {
       axios.get('http://localhost:8000/api/products/')
@@ -72,11 +73,31 @@ function NewSale() {
   };
 
   const handleAddProduct = () => {
-    if (selectedProduct) {
-      const total = selectedProduct.unit_price * quantity;
-      const productToAdd = { ...selectedProduct, quantity, total };
-      setSelectedProducts([...selectedProducts, productToAdd]);
-      setSelectedProduct(null);
+    if (selectedProduct && quantity > 0) {
+      const existingProduct = selectedProducts.find(
+        (product) => product.id === selectedProduct.id
+      );
+  
+      if (existingProduct) {
+        // If the product already exists, update the quantity
+        const updatedProducts = selectedProducts.map((product) => {
+          if (product.id === selectedProduct.id) {
+            return {
+              ...product,
+              quantity: product.quantity + quantity,
+              total: product.total + selectedProduct.unit_price * quantity,
+            };
+          }
+          return product;
+        });
+  
+        setSelectedProducts(updatedProducts);
+      } else {
+        // If it's a new product, add it to the list
+        const total = selectedProduct.unit_price * quantity;
+        const productToAdd = { ...selectedProduct, quantity, total };
+        setSelectedProducts([...selectedProducts, productToAdd]);
+      }
       setQuantity(0);
     }
   };
@@ -112,6 +133,11 @@ function NewSale() {
 
     return `${day}/${month}/${year} ${hours}:${minutes}`;
   }
+
+  useEffect(() => {
+    const saleTotal = selectedProducts.reduce((total, product) => total + product.total, 0);
+    setTotalSale(saleTotal);
+  }, [selectedProducts]);
 
   return (
     <div className='container'>
@@ -223,7 +249,10 @@ function NewSale() {
                     ))}
                 </select>
 
-                <p style={{marginTop: '27px'}}>Valor total da venda: </p>
+                <div className="d-flex justify-content-space-between" style={{marginTop: '27px'}}>
+                    <p className='fw-600' style={{fontSize: '18px'}}>Valor total da venda: </p>
+                    <p className='fw-700' style={{fontSize: '28px'}}>R$ {totalSale.toFixed(2)}</p>
+                </div>
 
                 <div className='d-flex justify-content-space-between'>
                     <Link to="/"><button className='btn btn-success'>Cancelar</button></Link>
