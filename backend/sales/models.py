@@ -17,3 +17,9 @@ class SaleItem(models.Model):
     sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity_sold = models.PositiveIntegerField()
+
+
+class CommissionRules(models.Model):
+    day_of_week = models.CharField(max_length=20)
+    min_commission_rate = models.DecimalField(max_digits=4, decimal_places=2)
+    max_commission_rate = models.DecimalField(max_digits=4, decimal_places=2)
