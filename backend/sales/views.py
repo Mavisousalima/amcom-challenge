@@ -2,7 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Sale
+from .models import Sale, SaleItem
+from products.models import Product
 from .serializers import SaleSerializer
 
 
@@ -29,7 +30,23 @@ class SaleCreateView(APIView):
         serializer = SaleSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save()
+            sale = serializer.save()
+
+            # Process the products and create SaleItem objects
+            products_data = request.data.get('products', [])
+            for product_data in products_data:
+                product_id = product_data.get('id')
+                quantity_sold = product_data.get('quantity', 1)  # Default to 1 if quantity is not provided
+
+                # Fetch the product
+                try:
+                    product = Product.objects.get(pk=product_id)
+                except Product.DoesNotExist:
+                    return Response({"message": f"Product with ID {product_id} not found"}, status=status.HTTP_404_NOT_FOUND)
+
+                # Create the SaleItem
+                SaleItem.objects.create(sale=sale, product=product, quantity_sold=quantity_sold)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
