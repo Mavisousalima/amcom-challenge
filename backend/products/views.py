@@ -26,7 +26,7 @@ class ProductDetailView(APIView):
 
 class ProductCreateView(APIView):
      def post(self, request):
-          serializer = ProductSerializer
+          serializer = ProductSerializer(data=request.data)
 
           if serializer.is_valid():
                serializer.save()

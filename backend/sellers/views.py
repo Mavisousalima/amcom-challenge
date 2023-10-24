@@ -25,7 +25,7 @@ class SellerDetailView(APIView):
 
 class SellerCreateView(APIView):
      def post(self, request):
-          serializer = SellerSerializer(request.data)
+          serializer = SellerSerializer(data=request.data)
 
           if serializer.is_valid():
                serializer.save()
