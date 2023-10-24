@@ -1,0 +1,72 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    background-color: #F0F0F0;
+    color: white;
+    padding: 10px;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .hamburger {
+    flex-direction: column;
+    cursor: pointer;
+  }
+  
+  .bar {
+    width: 25px;
+    height: 3px;
+    background-color: #2B7D83;
+    margin: 3px 0;
+    transition: 0.4s;
+  }
+  
+  .menu {
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .menu a {
+    text-decoration: none;
+    color: white;
+    margin: 5px;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .menu a:hover {
+    color: #007bff;
+  }
+  
+  .open {
+    display: block;
+  }
+  
+  @media (max-width: 768px) {
+    .menu.open {
+      display: none; /* Initially hide the links */
+    }
+    .hamburger {
+      display: flex;
+    }
+    .menu {
+      background-color: #333;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 100%;
+      z-index: 1000;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+    }
+    .menu.open {
+      display: block; /* Show the links when the hamburger is clicked */
+    }
+  }
+  

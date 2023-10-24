@@ -1,0 +1,12 @@
+button {
+    border: none;
+    cursor: pointer;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table thead tr th {
+    border-bottom: 1px solid #888888;
+}

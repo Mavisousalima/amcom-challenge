@@ -1,13 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Product from './components/Product';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import SalesTable from './components/SalesTable';
+import NewSale from './components/NewSale';
 
 function App() {
   return (
-    <div className="App">
-      <Product/>
-    </div>
+    <Router>
+      <Navbar/>
+      <Routes>
+        <Route path="/" element={<SalesTable/>} />
+        <Route path="/new-sale" element={<NewSale/>} />
+      </Routes>
+    </Router>
   );
 }
 
